@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:mobifin="http://mobifin.io/schema/bpmn" id="sample-diagram" targetNamespace="http://bpmn.io/schema/bpmn" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+  <bpmn2:process id="Process_1" isExecutable="false">
+    <bpmn2:startEvent id="STARTEVENT_Event_0fxeyvh" name="Start" UID="STARTEVENT" BlockCategory="1" Task_Name="Start Event">
+      <bpmn2:outgoing>Flow_1jwmlkn</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:endEvent id="ENDEVENT_Event_0xxy5i8" name="End" UID="ENDEVENT" BlockCategory="1" Task_Name="End Event">
+      <bpmn2:incoming>Flow_0f974w3</bpmn2:incoming>
+      <bpmn2:incoming>Flow_1gc2vqk</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:sequenceFlow id="Flow_1jwmlkn" sourceRef="STARTEVENT_Event_0fxeyvh" targetRef="GENERATE_OTP_Activity_0ik5yvn" UID="SEQUENCEFLOW" BlockCategory="1" Task_Name="Sequence Flow" />
+    <mobifin:serviceTask id="ONBOARDUSER_Activity_1n6cmws" UID="ONBOARDUSER" BlockCategory="1" Task_Name="Onboard User" OUTPUTPERSISTKEY_ONBOARDUSER="onboardUser" BUSINESSDEFINATION_ONBOARDUSER="CUSTOMER_1403_460_OET" USERIDENTIFIER_ONBOARDUSER="TAPESTRYREQUEST.Identifier" USERIDENTIFIER_ONBOARDUSER_DISPLAY="TAPESTRYREQUEST.Identifier" USERKYC_ONBOARDUSER="TAPESTRYREQUEST.Identifier" USERKYC_ONBOARDUSER_DISPLAY="TAPESTRYREQUEST.Identifier" PASSWORD_ONBOARDUSER_DISPLAY="BLOCKOUTPUT.GenerateOTP.output.otp" PASSWORD_ONBOARDUSER="RESPONSE.GenerateOTP.output.otp">
+      <bpmn2:incoming>Flow_1mxvvb5</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_1a96qju</bpmn2:outgoing>
+    </mobifin:serviceTask>
+    <bpmn2:sequenceFlow id="Flow_1a96qju" sourceRef="ONBOARDUSER_Activity_1n6cmws" targetRef="RULE_Gateway_0a75mog" />
+    <bpmn2:exclusiveGateway id="RULE_Gateway_0a75mog" UID="RULE" BlockCategory="1" Task_Name="Rule">
+      <bpmn2:incoming>Flow_1a96qju</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_1rk6gjj</bpmn2:outgoing>
+      <bpmn2:outgoing>Flow_1xpkfgd</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:sequenceFlow id="Flow_1rk6gjj" sourceRef="RULE_Gateway_0a75mog" targetRef="PREPAREANDSENDNOTIFICATION_Activity_1ot1vf4" OPERATOR_SEQUENCEFLOW="&#62;" VALUE_SEQUENCEFLOW_DISPLAY="0" VALUE_SEQUENCEFLOW="0" PARAMETER_SEQUENCEFLOW="RESPONSE.onboardUser.response_code" PARAMETER_SEQUENCEFLOW_DISPLAY="BLOCKOUTPUT.onboardUser.response_code" />
+    <mobifin:serviceTask id="PREPAREANDSENDNOTIFICATION_Activity_1ot1vf4" UID="PREPAREANDSENDNOTIFICATION" BlockCategory="1" Task_Name="Prepare &#38; Send Notification" OUTPUTPERSISTKEY_PREPAREANDSENDNOTIFICATION="SuccessEmail" NAME_PREPAREANDSENDNOTIFICATION="OnboardSuccessNotification" SUBJECT_PREPAREANDSENDNOTIFICATION_DISPLAY="Welcome Onboard! Your OTP is Here" SUBJECT_PREPAREANDSENDNOTIFICATION="Welcome Onboard! Your OTP is Here" BODY_PREPAREANDSENDNOTIFICATION_DISPLAY="Hi TAPESTRYREQUEST.Email,&#10;&#10;Congratulations! You are successfully onboarded.&#10;&#10;Please use the following OTP as your login password: Body:&#10;Hi [User’s Name],&#10;&#10;Congratulations! You are successfully onboarded. &#10;&#10;Please use the following OTP as your login password: BLOCKOUTPUT.GenerateOTP.output.otp&#10;&#10;Max Attempt: BLOCKOUTPUT.GenerateOTP.output.max_verification_attempt &#10;&#10;Transaction Id: BLOCKOUTPUT.GenerateOTP.output.otp_transaction_id" BODY_PREPAREANDSENDNOTIFICATION="Hi TAPESTRYREQUEST.Email,&#10;&#10;Congratulations! You are successfully onboarded.&#10;&#10;Please use the following OTP as your login password: Body:&#10;Hi [User’s Name],&#10;&#10;Congratulations! You are successfully onboarded. &#10;&#10;Please use the following OTP as your login password: BLOCKOUTPUT.GenerateOTP.output.otp&#10;&#10;Max Attempt: RESPONSE.GenerateOTP.output.max_verification_attempt &#10;&#10;Transaction Id: RESPONSE.GenerateOTP.output.otp_transaction_id" RECEIVER_PREPAREANDSENDNOTIFICATION="TAPESTRYREQUEST.Email" RECEIVER_PREPAREANDSENDNOTIFICATION_DISPLAY="TAPESTRYREQUEST.Email">
+      <bpmn2:incoming>Flow_1rk6gjj</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_0elbg7g</bpmn2:outgoing>
+    </mobifin:serviceTask>
+    <bpmn2:sequenceFlow id="Flow_0elbg7g" sourceRef="PREPAREANDSENDNOTIFICATION_Activity_1ot1vf4" targetRef="SENDRESPONSE_Activity_04mr0k6" />
+    <mobifin:serviceTask id="PREPAREANDSENDNOTIFICATION_Activity_0209oyi" UID="PREPAREANDSENDNOTIFICATION" BlockCategory="1" Task_Name="Prepare &#38; Send Notification" OUTPUTPERSISTKEY_PREPAREANDSENDNOTIFICATION="FailedOnboarding" NAME_PREPAREANDSENDNOTIFICATION="Failed Onboard" BODY_PREPAREANDSENDNOTIFICATION_DISPLAY="Hi TAPESTRYREQUEST.Email,&#10;&#10;Congratulations! You are successfully onboarded.&#10;&#10;Please use the following OTP as your login password: Body:&#10;Hi [User’s Name],&#10;&#10;Congratulations! You are successfully onboarded. &#10;&#10;Please use the following OTP as your login password: BLOCKOUTPUT.GenerateOTP.output.otp&#10;&#10;Max Attempt: BLOCKOUTPUT.GenerateOTP.output.max_verification_attempt &#10;&#10;Transaction Id: BLOCKOUTPUT.GenerateOTP.output.otp_transaction_id" BODY_PREPAREANDSENDNOTIFICATION="Hi TAPESTRYREQUEST.Email,&#10;&#10;Congratulations! You are successfully onboarded.&#10;&#10;Please use the following OTP as your login password: Body:&#10;Hi [User’s Name],&#10;&#10;Congratulations! You are successfully onboarded. &#10;&#10;Please use the following OTP as your login password: BLOCKOUTPUT.GenerateOTP.output.otp&#10;&#10;Max Attempt: BLOCKOUTPUT.GenerateOTP.output.max_verification_attempt &#10;&#10;Transaction Id: BLOCKOUTPUT.GenerateOTP.output.otp_transaction_id" SUBJECT_PREPAREANDSENDNOTIFICATION_DISPLAY="Onboard failed" SUBJECT_PREPAREANDSENDNOTIFICATION="Onboard failed" RECEIVER_PREPAREANDSENDNOTIFICATION="TAPESTRYREQUEST.Email" RECEIVER_PREPAREANDSENDNOTIFICATION_DISPLAY="TAPESTRYREQUEST.Email">
+      <bpmn2:incoming>Flow_1xpkfgd</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_0bjax1t</bpmn2:outgoing>
+    </mobifin:serviceTask>
+    <bpmn2:sequenceFlow id="Flow_1xpkfgd" sourceRef="RULE_Gateway_0a75mog" targetRef="PREPAREANDSENDNOTIFICATION_Activity_0209oyi" UID="SEQUENCEFLOW" BlockCategory="1" Task_Name="Sequence Flow" OPERATOR_SEQUENCEFLOW="&#60;" VALUE_SEQUENCEFLOW_DISPLAY="0" VALUE_SEQUENCEFLOW="0" PARAMETER_SEQUENCEFLOW="RESPONSE.onboardUser.response_code" PARAMETER_SEQUENCEFLOW_DISPLAY="BLOCKOUTPUT.onboardUser.response_code" />
+    <bpmn2:sequenceFlow id="Flow_0bjax1t" sourceRef="PREPAREANDSENDNOTIFICATION_Activity_0209oyi" targetRef="SENDRESPONSE_Activity_12y8bdd" UID="SEQUENCEFLOW" BlockCategory="1" Task_Name="Sequence Flow" />
+    <mobifin:serviceTask id="SENDRESPONSE_Activity_04mr0k6" UID="SENDRESPONSE" BlockCategory="1" Task_Name="Send Response" RESPONSEDATA_SENDRESPONSE="{Otp:RESPONSE.GenerateOTP.output.otp}" RESPONSEDATA_SENDRESPONSE_DISPLAY="{Otp:BLOCKOUTPUT.GenerateOTP.output.otp}" RESPONSECODE_SENDRESPONSE_DISPLAY="200" RESPONSECODE_SENDRESPONSE="200" RESPONSEMESSAGE_SENDRESPONSE_DISPLAY="Success" RESPONSEMESSAGE_SENDRESPONSE="Success">
+      <bpmn2:incoming>Flow_0elbg7g</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_0f974w3</bpmn2:outgoing>
+    </mobifin:serviceTask>
+    <bpmn2:sequenceFlow id="Flow_0f974w3" sourceRef="SENDRESPONSE_Activity_04mr0k6" targetRef="ENDEVENT_Event_0xxy5i8" />
+    <mobifin:serviceTask id="SENDRESPONSE_Activity_12y8bdd" UID="SENDRESPONSE" BlockCategory="1" Task_Name="Send Response" RESPONSEDATA_SENDRESPONSE="" RESPONSEDATA_SENDRESPONSE_DISPLAY="" RESPONSECODE_SENDRESPONSE_DISPLAY="400" RESPONSECODE_SENDRESPONSE="400" RESPONSEMESSAGE_SENDRESPONSE_DISPLAY="Failed" RESPONSEMESSAGE_SENDRESPONSE="Failed">
+      <bpmn2:incoming>Flow_0bjax1t</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_1gc2vqk</bpmn2:outgoing>
+    </mobifin:serviceTask>
+    <bpmn2:sequenceFlow id="Flow_1gc2vqk" sourceRef="SENDRESPONSE_Activity_12y8bdd" targetRef="ENDEVENT_Event_0xxy5i8" />
+    <mobifin:serviceTask id="GENERATE_OTP_Activity_0ik5yvn" UID="GENERATE_OTP" BlockCategory="1" Task_Name="Generate OTP" OUTPUTPERSISTKEY_GENERATE_OTP="GenerateOTP" LENGTH_GENERATE_OTP="GDP.CLEVER_ENGINELOGIC780_1403_460.OTPLENGTH8_606_1403_460" LENGTH_GENERATE_OTP_DISPLAY="GDP.Clever_EngineLogic780.otplength8" KEY_GENERATE_OTP="GDP.CLEVER_ENGINELOGIC780_1403_460.OTPKEY_606_1403_460" KEY_GENERATE_OTP_DISPLAY="GDP.Clever_EngineLogic780.otpKey" VALIDITY_GENERATE_OTP="GDP.CLEVER_ENGINELOGIC780_1403_460.OTPTIMELIMIT24HR_606_1403_460" VALIDITY_GENERATE_OTP_DISPLAY="GDP.Clever_EngineLogic780.otptimeLimit24Hr" VERIFICATION_ATTEMPT_GENERATE_OTP_DISPLAY="5" VERIFICATION_ATTEMPT_GENERATE_OTP="5">
+      <bpmn2:incoming>Flow_1jwmlkn</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_0h8lifd</bpmn2:outgoing>
+    </mobifin:serviceTask>
+    <mobifin:serviceTask id="SENDRESPONSE_Activity_0oshcxr" UID="SENDRESPONSE" BlockCategory="1" Task_Name="Send Response" RESPONSEDATA_SENDRESPONSE="" RESPONSEDATA_SENDRESPONSE_DISPLAY="" RESPONSEMESSAGE_SENDRESPONSE_DISPLAY="OTP Gen Failed" RESPONSEMESSAGE_SENDRESPONSE="OTP Gen Failed" RESPONSECODE_SENDRESPONSE_DISPLAY="200" RESPONSECODE_SENDRESPONSE="200">
+      <bpmn2:incoming>Flow_1lqw27w</bpmn2:incoming>
+    </mobifin:serviceTask>
+    <bpmn2:exclusiveGateway id="RULE_Gateway_057xhqo" UID="RULE" BlockCategory="1" Task_Name="Rule">
+      <bpmn2:incoming>Flow_0h8lifd</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_1mxvvb5</bpmn2:outgoing>
+      <bpmn2:outgoing>Flow_1lqw27w</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:sequenceFlow id="Flow_1mxvvb5" sourceRef="RULE_Gateway_057xhqo" targetRef="ONBOARDUSER_Activity_1n6cmws" UID="SEQUENCEFLOW" BlockCategory="1" Task_Name="Sequence Flow" PARAMETER_SEQUENCEFLOW="RESPONSE.GenerateOTP.response_code" PARAMETER_SEQUENCEFLOW_DISPLAY="BLOCKOUTPUT.GenerateOTP.response_code" OPERATOR_SEQUENCEFLOW="&#62;" VALUE_SEQUENCEFLOW_DISPLAY="0" VALUE_SEQUENCEFLOW="0" />
+    <bpmn2:sequenceFlow id="Flow_1lqw27w" sourceRef="RULE_Gateway_057xhqo" targetRef="SENDRESPONSE_Activity_0oshcxr" UID="SEQUENCEFLOW" BlockCategory="1" Task_Name="Sequence Flow" PARAMETER_SEQUENCEFLOW="RESPONSE.GenerateOTP.response_code" PARAMETER_SEQUENCEFLOW_DISPLAY="BLOCKOUTPUT.GenerateOTP.response_code" OPERATOR_SEQUENCEFLOW="&#60;" VALUE_SEQUENCEFLOW_DISPLAY="0" VALUE_SEQUENCEFLOW="0" />
+    <bpmn2:sequenceFlow id="Flow_0h8lifd" sourceRef="GENERATE_OTP_Activity_0ik5yvn" targetRef="RULE_Gateway_057xhqo" UID="SEQUENCEFLOW" BlockCategory="1" Task_Name="Sequence Flow" />
+  <bpmn:extensionElements>
+    <mobifin:collection>
+        <mobifin:workflow>
+      <name>onboardUserUsingOTP</name>
+      <UID>ONBOARDUSERUSINGOTP_1094_1403_460</UID>
+      <description>dd</description>
+      <apiMethod>ADAPTER_POST</apiMethod>
+      <mobifin:workflowInputParams>
+        <parameter name="Identifier" defaultValue="" isMandatory="1" validationMessage="" regularExpression=""/>
+        <parameter name="Email" defaultValue="" isMandatory="1" validationMessage="" regularExpression=""/>
+      </mobifin:workflowInputParams>
+    </mobifin:workflow>
+  </mobifin:collection>
+    <mobifin:gdp>
+    <name>Clever EngineLogic780</name>
+        <mobifin:gdpDetail>
+      <name>otplength8</name>
+      <value>8</value>
+    </mobifin:gdpDetail>
+        <mobifin:gdpDetail>
+      <name>otpKey</name>
+      <value>OneTimePassword</value>
+    </mobifin:gdpDetail>
+        <mobifin:gdpDetail>
+      <name>otptimeLimit24Hr</name>
+      <value>86400</value>
+    </mobifin:gdpDetail>
+  </mobifin:gdp>
+</bpmn:extensionElements>
+</bpmn2:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">
+      <bpmndi:BPMNShape id="Event_0fxeyvh_di" bpmnElement="STARTEVENT_Event_0fxeyvh">
+        <dc:Bounds x="155" y="85" width="150" height="150" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="217" y="235" width="26" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0xxy5i8_di" bpmnElement="ENDEVENT_Event_0xxy5i8">
+        <dc:Bounds x="3395" y="95" width="150" height="150" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3460" y="71" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1n6cmws_di" bpmnElement="ONBOARDUSER_Activity_1n6cmws">
+        <dc:Bounds x="1280" y="60" width="300" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0a75mog_di" bpmnElement="RULE_Gateway_0a75mog" isMarkerVisible="true">
+        <dc:Bounds x="1700" y="100" width="120" height="120" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ot1vf4_di" bpmnElement="PREPAREANDSENDNOTIFICATION_Activity_1ot1vf4">
+        <dc:Bounds x="2580" y="70" width="300" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0209oyi_di" bpmnElement="PREPAREANDSENDNOTIFICATION_Activity_0209oyi">
+        <dc:Bounds x="2350" y="350" width="300" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_04mr0k6_di" bpmnElement="SENDRESPONSE_Activity_04mr0k6">
+        <dc:Bounds x="3020" y="70" width="300" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_12y8bdd_di" bpmnElement="SENDRESPONSE_Activity_12y8bdd">
+        <dc:Bounds x="2950" y="350" width="300" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ik5yvn_di" bpmnElement="GENERATE_OTP_Activity_0ik5yvn">
+        <dc:Bounds x="540" y="60" width="300" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0oshcxr_di" bpmnElement="SENDRESPONSE_Activity_0oshcxr">
+        <dc:Bounds x="930" y="610" width="300" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_057xhqo_di" bpmnElement="RULE_Gateway_057xhqo" isMarkerVisible="true">
+        <dc:Bounds x="970" y="100" width="120" height="120" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1jwmlkn_di" bpmnElement="Flow_1jwmlkn">
+        <di:waypoint x="305" y="160" />
+        <di:waypoint x="540" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1a96qju_di" bpmnElement="Flow_1a96qju">
+        <di:waypoint x="1580" y="160" />
+        <di:waypoint x="1700" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1rk6gjj_di" bpmnElement="Flow_1rk6gjj">
+        <di:waypoint x="1820" y="160" />
+        <di:waypoint x="2200" y="160" />
+        <di:waypoint x="2200" y="170" />
+        <di:waypoint x="2580" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0elbg7g_di" bpmnElement="Flow_0elbg7g">
+        <di:waypoint x="2880" y="170" />
+        <di:waypoint x="3020" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xpkfgd_di" bpmnElement="Flow_1xpkfgd">
+        <di:waypoint x="1760" y="220" />
+        <di:waypoint x="1760" y="450" />
+        <di:waypoint x="2350" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0bjax1t_di" bpmnElement="Flow_0bjax1t">
+        <di:waypoint x="2650" y="450" />
+        <di:waypoint x="2950" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0f974w3_di" bpmnElement="Flow_0f974w3">
+        <di:waypoint x="3320" y="170" />
+        <di:waypoint x="3395" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1gc2vqk_di" bpmnElement="Flow_1gc2vqk">
+        <di:waypoint x="3250" y="450" />
+        <di:waypoint x="3470" y="450" />
+        <di:waypoint x="3470" y="245" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1mxvvb5_di" bpmnElement="Flow_1mxvvb5">
+        <di:waypoint x="1090" y="160" />
+        <di:waypoint x="1280" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1lqw27w_di" bpmnElement="Flow_1lqw27w">
+        <di:waypoint x="1030" y="220" />
+        <di:waypoint x="1030" y="275" />
+        <di:waypoint x="1080" y="275" />
+        <di:waypoint x="1080" y="610" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0h8lifd_di" bpmnElement="Flow_0h8lifd">
+        <di:waypoint x="840" y="160" />
+        <di:waypoint x="970" y="160" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>
